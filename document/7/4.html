@@ -1,0 +1,17 @@
+<!DOCTYPE HTML>
+<html>
+	<body>
+		<ul id = 'ul'> </ul>
+		<script>
+			let ul = document.getElementById('ul');
+
+			while (true) {
+				let elem = prompt('Введите название элемента списка', '');
+
+				if (!elem) break;
+				
+				ul.innerHTML += `<li>${elem}</li>`
+			}
+		</script>
+	</body>
+</html>

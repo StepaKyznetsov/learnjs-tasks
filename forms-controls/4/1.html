@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+	html,
+	body {
+	  margin: 0;
+	  padding: 0;
+	  width: 100%;
+	  height: 100%;
+	}
+	#prompt-form {
+	  display: inline-block;
+	  padding: 5px 5px 5px 70px;
+	  width: 200px;
+	  border: 1px solid black;
+	  background: white url(https://en.js.cx/clipart/prompt.png) no-repeat left 5px;
+	  vertical-align: middle;
+	}
+	#prompt-form-container {
+	  position: fixed;
+	  top: 0;
+	  left: 0;
+	  z-index: 9999;
+	  display: none;
+	  width: 100%;
+	  height: 100%;
+	  text-align: center;
+	}
+	#prompt-form-container:before {
+	  display: inline-block;
+	  height: 100%;
+	  content: '';
+	  vertical-align: middle;
+	}
+	#cover-div {
+	  position: fixed;
+	  top: 0;
+	  left: 0;
+	  z-index: 9000;
+	  width: 100%;
+	  height: 100%;
+	  background-color: gray;
+	  opacity: 0.3;
+	}
+	#prompt-form input[name="text"] {
+	  display: block;
+	  margin: 5px;
+	  width: 180px;
+	}
+  </style>
+</head>
+<body style="height:3000px">
+  <h2>Кликните на кнопку ниже</h2>
+  <input type = "button" value = "Кликните, чтобы увидеть форму" id = "show">
+  <div id = "prompt-form-container">
+    <form id = "prompt-form">
+      <div id = "prompt-message"></div>
+      <input name = "text" type = "text">
+      <input type = "submit" value = "Ok">
+      <input type = "button" name = "cancel" value = "Отмена">
+    </form>
+  </div>
+  <script>
+    let modal = document.getElementById('prompt-form-container');
+	let shiftKey = false
+
+	function showPrompt(html, callback) {
+		modal.style.display = 'block'
+		modal.style.backgroundColor = 'rgba(200, 200, 200, 0.5)'
+
+		document.body.style.overflowY = 'hidden'
+		document.forms[0].text.focus()
+		document.querySelector('#prompt-message').innerHTML = html
+		document.forms[0].onsubmit = function (e) {
+			e.preventDefault()
+			callback(document.forms[0].text.value)
+			document.forms[0].text.value = ''
+			modal.style.display = 'none'
+			document.body.style.overflowY = 'auto'
+	}
+
+		let f = function (e) {
+			e.preventDefault()
+			if (e.target != document.forms[0].cancel) return
+			callback(null)
+			modal.style.display = 'none'
+			document.forms[0].cancel.removeEventListener('click', f)
+		}
+	
+		document.forms[0].cancel.addEventListener('click', f)
+	}
+
+	show.onclick = function () {
+		showPrompt("Введите что-нибудь...умное", function (value) {
+			alert(value)
+		})
+	}
+
+	document.addEventListener('keydown', function (e) {
+	
+		if (e.code == 'Tab' && document.forms[0].cancel.className == 'fc' && !shiftKey) {
+			e.preventDefault()
+			document.forms[0].text.focus()
+		}
+
+		if (e.code == 'ShiftLeft' || e.code == 'ShiftRight') shiftKey = true
+
+		if (e.code == 'Tab' && shiftKey && document.forms[0].text.className == 'fc') {
+			e.preventDefault()
+			document.forms[0].cancel.focus()
+		}
+	})
+
+	document.addEventListener('keyup', function (e) {
+		if (e.code == 'ShiftLeft' || e.code == 'ShiftRight') shiftKey = false
+	})
+
+	document.forms[0].cancel.onfocus = function () {
+		document.forms[0].cancel.classList.add('fc')
+	}
+
+	document.forms[0].cancel.onblur = function () {
+		document.forms[0].cancel.classList.remove('fc')
+	}
+
+	document.forms[0].text.onfocus = function () {
+		document.forms[0].text.classList.add('fc')
+	}
+
+	document.forms[0].text.onblur = function () {
+		document.forms[0].text.classList.remove('fc')
+	}
+  </script>
+</body>
+</html>
