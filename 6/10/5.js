@@ -8,7 +8,7 @@ let user = {
   name: 'John',
 
   login(result) {
-    alert( this.name + (result ? ' logged in' : ' failed to log in') );
+    alert(this.name + (result ? ' logged in' : ' failed to log in'));
   }
 };
 

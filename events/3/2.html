@@ -53,20 +53,22 @@
     </li>
   </ul>
   <script>
-    let tree = document.getElementById('tree')
-	
-    for (let li of tree.querySelectorAll('li')) {
-      let span = document.createElement('span');
-      li.prepend(span);
-      span.append(span.nextSibling);
-    }
+    let lis = document.querySelectorAll('li');
 
-    tree.onclick = function(event) {
-      let childrenContainer = event.target.parentNode.querySelector('ul');
-      if (!childrenContainer) return;
+    lis.forEach((element) => {
+      let content = element.firstChild.textContent;
+      element.firstChild.textContent = '';
+      element.insertAdjacentHTML('afterbegin', `<span>${content}</span>`);
+    })
 
-      childrenContainer.hidden = !childrenContainer.hidden;
-    }
+    tree.addEventListener('click', (event) => {
+      
+      if(event.target.tagName !== 'SPAN') return
+
+      let childs = event.target.closest('li').lastElementChild;
+
+      if(childs.tagName === 'UL') childs.hidden = !childs.hidden;
+    })
   </script>
 </body>
 </html>

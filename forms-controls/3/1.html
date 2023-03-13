@@ -70,22 +70,29 @@
   <script>
 
     let form = document.forms.calculator;
+	let moneyBefore = document.getElementById('money-before');
+	let moneyAfter = document.getElementById('money-after');
+	let heightAfter = document.getElementById('height-after');
 
-    function calculate(){
-      let init = +form.money.value;
-      let interest = form.interest.value * 0.01;
-      let years = form.months.value / 12;
-      let result = Math.round(init * (1 + interest) ** years);
+	updateDiagram();
 
-      document.getElementById('height-after').style.height = result / form.money.value * 100 + 'px';
-      document.getElementById('money-before').innerHTML = form.money.value;
-      document.getElementById('money-after').innerHTML = result;
-    }
-	form.money.oninput = calculate;
-    form.months.onchange = calculate;
-    form.interest.oninput = calculate;
-	
-    calculate();
+	form.money.addEventListener('input', inputHandler);
+	form.months.addEventListener('change', inputHandler);
+	form.interest.addEventListener('input', inputHandler);
+
+	function inputHandler(e) {
+		updateDiagram();
+	}
+
+	function calculateProfit(initial, interest, months) {
+		return Math.round(initial * (1 + interest / 100 * months / 12));
+	}
+
+	function updateDiagram() {
+		moneyBefore.textContent = form.money.value;
+		moneyAfter.textContent = calculateProfit(form.money.value, form.interest.value, form.months.selectedOptions[0].value);
+		heightAfter.style.height = moneyAfter.textContent / moneyBefore.textContent * 100 + 'px';
+	}
   </script>
 
 

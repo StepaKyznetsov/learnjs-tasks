@@ -67,16 +67,15 @@
 
       let compare;
 
-      switch (type) {
-        case 'number':
-          compare = function(rowA, rowB) {
+      if (type === 'number'){
+		compare = function(rowA, rowB) {
             return rowA.cells[colNum].innerHTML - rowB.cells[colNum].innerHTML
           }
-        case 'string':
-          compare = function(rowA, rowB) {
-            return rowA.cells[colNum].innerHTML > rowB.cells[colNum].innerHTML ? 1 : -1
-          }
-      }
+	  }
+	  if (type === 'string'){
+		compare = function(rowA, rowB) {
+			return rowA.cells[colNum].innerHTML > rowB.cells[colNum].innerHTML ? 1 : -1          }
+	  }
 
       rowsArray.sort(compare);
 
